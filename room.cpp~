@@ -1,0 +1,83 @@
+/*
+  this
+*/
+#include <iostream>
+#include <map>
+#include <cstring>
+#include "room.h"
+
+using namespace std;
+
+room::room(char* newName, char* newDescription){
+  name = newName;
+  description = newDescription;
+  visited = false;
+}
+
+room::~room(){
+  delete name;
+  delete description;
+}
+void room::addItem(char* itemName, item* item){
+  items[itemName] = item;
+}
+void room::deleteItem(char* itemName){
+  for(map<char*, item*>::iterator it = items.begin(); it != items.end(); it++){
+    if(strcmp(itemName, it->first) == 0){
+      items.erase(it);
+      break;
+    }
+  }
+}
+item* room::getItem(char* itemName){
+  for(map<char*, item*>::iterator it = items.begin(); it != items.end(); it++){
+    if(strcmp(itemName, it->first) == 0){
+      return items[it->first];
+    }
+  }
+  if(items.find(itemName) == items.end()){
+    cout << "You could not find that item in the room." << endl;
+    item* itemPointer = NULL;
+    return itemPointer;
+  }
+}
+void room::getItems(){
+  for(map<char*, item*>::iterator it = items.begin(); it != items.end(); it++){
+    cout << it->first << endl;
+  }
+  if(items.empty() == true){
+    cout << "There are no items in this room." << endl;
+  }
+}
+void room::addExit(char* direction, char* room){
+  exits[direction] = room;
+}
+char* room::getExit(char* direction){
+  for(map<char*, char*>::iterator it = exits.begin(); it != exits.end(); it++){
+    if(strcmp(direction, it->first) == 0){
+      cout << "*door opens and closes*" << endl;
+      return exits[it->first];
+    }
+  }
+  if(exits.find(direction) == exits.end()){
+    cout << "You got confused and hit a wall..." << endl;
+    return "NULL";
+  }
+}
+void room::getExits(){
+  for(map<char*, char*>::iterator it = exits.begin(); it != exits.end(); it++){
+    cout << it->first << endl;
+  }
+}
+char* room::getName(){
+  return name;
+}
+char* room::getDescription(){
+  return description;
+}
+bool room::checkVisited(){
+  return visited;
+}
+void room::setVisited(){
+  visited = true;
+}
